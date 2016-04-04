@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
@@ -41,6 +43,8 @@ import org.springframework.util.ReflectionUtils;
  * @since 1.0.0
  */
 public class ZookeeperServiceDiscovery implements ApplicationContextAware {
+
+	private static final Log log = LogFactory.getLog(ZookeeperServiceDiscovery.class);
 
 	private CuratorFramework curator;
 
@@ -94,15 +98,21 @@ public class ZookeeperServiceDiscovery implements ApplicationContextAware {
 	}
 
 	public void build() {
+		build(this.properties.isRegister());
+	}
+
+	public void build(boolean register) {
 		if (this.built.compareAndSet(false, true)) {
-			if (this.port.get() <= 0) {
-				throw new IllegalStateException("Cannot create instance whose port is not greater than 0");
+			if (register) {
+				if (this.port.get() <= 0) {
+					throw new IllegalStateException("Cannot create instance whose port is not greater than 0");
+				}
+				String host = this.properties.getInstanceHost() == null ? getIpAddress() :
+						this.properties.getInstanceHost();
+				UriSpec uriSpec = new UriSpec(this.properties.getUriSpec());
+				configureServiceInstance(this.serviceInstance, this.appName,
+						this.context, this.port, host, uriSpec);
 			}
-			String host = this.properties.getInstanceHost() == null ? getIpAddress() :
-					this.properties.getInstanceHost();
-			UriSpec uriSpec = new UriSpec(this.properties.getUriSpec());
-			configureServiceInstance(this.serviceInstance, this.appName,
-					this.context, this.port, host, uriSpec);
 			configureServiceDiscovery(this.serviceDiscovery, this.curator, this.properties,
 					this.instanceSerializer, this.serviceInstance);
 		}
@@ -151,6 +161,22 @@ public class ZookeeperServiceDiscovery implements ApplicationContextAware {
 
 	public String getIpAddress() {
 		return this.inetUtils.findFirstNonLoopbackAddress().getHostAddress();
+	}
+
+	public void shutdown() {
+		try {
+			this.built.compareAndSet(true, false);
+			ServiceInstance<ZookeeperInstance> instance = this.serviceInstance.getAndSet(null);
+			ServiceDiscovery<ZookeeperInstance> discovery = this.serviceDiscovery.getAndSet(null);
+			if (instance != null && discovery != null) {
+				discovery.unregisterService(instance);
+			}
+			if (discovery != null) {
+				discovery.close();
+			}
+		} catch (Exception e) {
+			log.error("Error shutting down serviceDiscovery", e);
+		}
 	}
 
 	protected AtomicReference<ServiceDiscovery<ZookeeperInstance>> getServiceDiscoveryRef() {

@@ -16,6 +16,8 @@
 
 package org.springframework.cloud.zookeeper.discovery;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.cloud.client.discovery.AbstractDiscoveryLifecycle;
 import org.springframework.util.ReflectionUtils;
 
@@ -28,6 +30,8 @@ import org.springframework.util.ReflectionUtils;
  */
 public class ZookeeperLifecycle extends AbstractDiscoveryLifecycle {
 
+	private static final Log log = LogFactory.getLog(ZookeeperLifecycle.class);
+
 	private ZookeeperDiscoveryProperties properties;
 	private ZookeeperServiceDiscovery serviceDiscovery;
 
@@ -39,6 +43,10 @@ public class ZookeeperLifecycle extends AbstractDiscoveryLifecycle {
 
 	@Override
 	protected void register() {
+		if (!this.properties.isRegister()) {
+			log.debug("Registration disabled.");
+			return;
+		}
 		try {
 			this.serviceDiscovery.getServiceDiscovery().start();
 		}
@@ -51,6 +59,9 @@ public class ZookeeperLifecycle extends AbstractDiscoveryLifecycle {
 
 	@Override
 	protected void deregister() {
+		if (!this.properties.isRegister()) {
+			return;
+		}
 		try {
 			this.serviceDiscovery.getServiceDiscovery().unregisterService(
 					this.serviceDiscovery.getServiceInstance());

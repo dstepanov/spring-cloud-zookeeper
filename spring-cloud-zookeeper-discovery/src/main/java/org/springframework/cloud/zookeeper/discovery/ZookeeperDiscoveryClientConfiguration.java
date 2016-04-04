@@ -24,6 +24,7 @@ import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependencies;
@@ -54,18 +55,20 @@ public class ZookeeperDiscoveryClientConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean
+	@ConditionalOnMissingBean(search = SearchStrategy.CURRENT)
 	public ZookeeperServiceDiscovery zookeeperServiceDiscovery(InetUtils inetUtils) {
 		return new ZookeeperServiceDiscovery(this.curator, zookeeperDiscoveryProperties(),
 				instanceSerializer(), inetUtils);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(search = SearchStrategy.CURRENT)
 	public ZookeeperLifecycle zookeeperLifecycle(ZookeeperServiceDiscovery zookeeperServiceDiscovery) {
 		return new ZookeeperLifecycle(zookeeperDiscoveryProperties(), zookeeperServiceDiscovery);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(search = SearchStrategy.CURRENT)
 	public ZookeeperDiscoveryClient zookeeperDiscoveryClient(ZookeeperServiceDiscovery zookeeperServiceDiscovery) {
 		return new ZookeeperDiscoveryClient(zookeeperServiceDiscovery, this.zookeeperDependencies);
 	}

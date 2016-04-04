@@ -53,6 +53,11 @@ public class ZookeeperDiscoveryProperties {
 	 */
 	private Map<String, String> metadata = new HashMap<>();
 
+	/**
+	 * Register as a service in zookeeper.
+	 */
+	private boolean register = true;
+
 	public boolean isEnabled() {
 		return this.enabled;
 	}
@@ -93,6 +98,14 @@ public class ZookeeperDiscoveryProperties {
 		this.metadata = metadata;
 	}
 
+	public boolean isRegister() {
+		return this.register;
+	}
+
+	public void setRegister(boolean register) {
+		this.register = register;
+	}
+
 	@Override
 	public String toString() {
 		return "ZookeeperDiscoveryProperties{" + "enabled=" + this.enabled +
@@ -100,6 +113,7 @@ public class ZookeeperDiscoveryProperties {
 				", uriSpec='" + this.uriSpec + '\'' +
 				", instanceHost='" + this.instanceHost + '\'' +
 				", metadata=" + this.metadata +
+				", register=" + this.register +
 				'}';
 	}
 }

@@ -5,7 +5,9 @@ org.springframework.cloud.zookeeper.discovery.RibbonZookeeperAutoConfiguration,\
 org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependenciesAutoConfiguration,\
 org.springframework.cloud.zookeeper.discovery.watcher.DependencyWatcherAutoConfiguration,\
 org.springframework.cloud.zookeeper.discovery.dependency.DependencyFeignClientAutoConfiguration,\
-org.springframework.cloud.zookeeper.discovery.dependency.DependencyRestTemplateAutoConfiguration
+org.springframework.cloud.zookeeper.discovery.dependency.DependencyRestTemplateAutoConfiguration,\
+org.springframework.cloud.zookeeper.discovery.configclient.ZookeeperConfigServerAutoConfiguration,\
+  org.springframework.cloud.zookeeper.discovery.configclient.ZookeeperDiscoveryClientConfigServiceAutoConfiguration
 
 # Environment Post Processors
 org.springframework.boot.env.EnvironmentPostProcessor=\
@@ -13,3 +15,6 @@ org.springframework.cloud.zookeeper.discovery.dependency.DependencyEnvironmentPo
 
 org.springframework.cloud.client.discovery.EnableDiscoveryClient=\
 org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryClientConfiguration
+
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+org.springframework.cloud.zookeeper.discovery.configclient.ZookeeperDiscoveryClientConfigServiceBootstrapConfiguration
