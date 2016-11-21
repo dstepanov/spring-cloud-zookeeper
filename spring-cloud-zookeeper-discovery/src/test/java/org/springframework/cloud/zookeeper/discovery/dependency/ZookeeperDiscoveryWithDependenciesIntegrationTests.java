@@ -131,21 +131,21 @@ public class ZookeeperDiscoveryWithDependenciesIntegrationTests {
 		// given:
 		ZookeeperDependency dependency = this.zookeeperDependencies.getDependencyForAlias("aliasIsPath");
 		// expect:
-		then(dependency.getPath()).isEqualTo("aliasIsPath");
+		then(dependency.getPath()).isEqualTo("/aliasIsPath");
 	}
 
 	@Test public void should_have_alias_equal_to_path() {
 		// given:
-		ZookeeperDependency dependency = this.zookeeperDependencies.getDependencyForPath("aliasIsPath");
+		ZookeeperDependency dependency = this.zookeeperDependencies.getDependencyForPath("/aliasIsPath");
 		// expect:
-		then(dependency.getPath()).isEqualTo("aliasIsPath");
+		then(dependency.getPath()).isEqualTo("/aliasIsPath");
 	}
 
 	@Test public void should_have_path_set_via_string_constructor() {
 		// given:
 		ZookeeperDependency dependency = this.zookeeperDependencies.getDependencyForAlias("anotherAlias");
 		// expect:
-		then(dependency.getPath()).isEqualTo("myPath");
+		then(dependency.getPath()).isEqualTo("/myPath");
 	}
 
 	private boolean callingServiceAtBeansEndpointIsNotEmpty() {
