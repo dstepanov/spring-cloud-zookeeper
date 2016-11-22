@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependencies;
 
-import static org.springframework.cloud.zookeeper.discovery.PathUtils.sanitize;
+import static org.springframework.cloud.zookeeper.discovery.DependencyPathUtils.sanitize;
 
 /**
  * An {@link Iterable} representing registered Zookeeper instances. If using

@@ -77,7 +77,7 @@ public class ZookeeperDiscoveryProperties {
 
 	@PostConstruct
 	public void init() {
-		this.root = PathUtils.sanitize(this.root);
+		this.root = DependencyPathUtils.sanitize(this.root);
 	}
 
 	public boolean isEnabled() {

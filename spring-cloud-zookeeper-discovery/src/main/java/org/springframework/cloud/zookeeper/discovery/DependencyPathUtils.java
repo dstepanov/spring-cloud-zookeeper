@@ -2,8 +2,9 @@ package org.springframework.cloud.zookeeper.discovery;
 
 /**
  * @author Denis Stepanov
+ * @since 1.2.2
  */
-public class PathUtils {
+public class DependencyPathUtils {
 
 	public static String sanitize(String path) {
 		return withLeadingSlash(withoutSlashAtEnd(path));

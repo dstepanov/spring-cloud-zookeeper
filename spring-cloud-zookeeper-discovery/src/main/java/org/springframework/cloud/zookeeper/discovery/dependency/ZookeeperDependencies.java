@@ -27,7 +27,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.zookeeper.discovery.dependency.StubsConfiguration.DependencyPath;
 import org.springframework.util.StringUtils;
 
-import static org.springframework.cloud.zookeeper.discovery.PathUtils.sanitize;
+import static org.springframework.cloud.zookeeper.discovery.DependencyPathUtils.sanitize;
 
 /**
  * Representation of this service's dependencies in Zookeeper
